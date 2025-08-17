@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="min-h-screen bg-base-200">
+  <div class="container mx-auto px-6 py-8">
+    <div class="flex items-start gap-6">
+      <!-- left column: calendar / summaries -->
+      <div class="w-3/4">
+        <div class="flex items-center justify-between">
+          <h1 class="text-2xl font-bold">Hello, {{ user.username }} — Dashboard</h1>
+          <div class="text-right">
+            <div class="text-sm text-muted">Account total</div>
+            <div class="text-2xl font-semibold">${{ account_total }}</div>
+          </div>
+        </div>
+
+        <!-- calendar placeholder -->
+        <div class="mt-6 bg-white p-4 rounded shadow">
+          <h2 class="font-semibold">Calendar (P&L by day)</h2>
+          <div id="calendar" class="mt-4">
+            <!-- A simple grid calendar can be implemented later; for now show daily P&L list -->
+            <div class="grid grid-cols-3 gap-2">
+              {% for item in pnl_daily %}
+                <div class="p-2 border rounded">
+                  <div class="text-sm text-muted">{{ item.date }}</div>
+                  <div class="font-bold">${{ '%.2f'|format(item.amount) }}</div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- charts -->
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-white p-4 rounded shadow">
+            <h3 class="font-semibold">Cumulative Balance</h3>
+            <canvas id="chart-cumulative" height="180"></canvas>
+          </div>
+          <div class="bg-white p-4 rounded shadow">
+            <h3 class="font-semibold">Daily P&L</h3>
+            <canvas id="chart-daily" height="180"></canvas>
+          </div>
+        </div>
+
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-white p-4 rounded shadow">
+            <div class="text-sm text-muted">Win Rate</div>
+            <div class="text-2xl font-bold">{{ win_rate }}%</div>
+          </div>
+          <div class="bg-white p-4 rounded shadow">
+            <div class="text-sm text-muted">Average Win</div>
+            <div class="text-2xl font-bold">${{ avg_win }}</div>
+          </div>
+          <div class="bg-white p-4 rounded shadow">
+            <div class="text-sm text-muted">Average Loss</div>
+            <div class="text-2xl font-bold">${{ avg_loss }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- right column: quick add / ledger -->
+      <div class="w-1/4">
+        <div class="bg-white p-4 rounded shadow">
+          <h3 class="font-semibold">Quick Add</h3>
+          <form action="{{ url_for('add_entry') }}" method="post" class="space-y-2 mt-3">
+            <label class="block text-sm">Date</label>
+            <input type="date" name="date" class="input input-bordered w-full" />
+
+            <label class="block text-sm">Type</label>
+            <select name="type" class="select select-bordered w-full">
+              <option value="trade">Trade</option>
+              <option value="deposit">Deposit</option>
+              <option value="withdrawal">Withdrawal</option>
+            </select>
+
+            <label class="block text-sm">Amount</label>
+            <input type="number" step="0.01" name="amount" class="input input-bordered w-full" placeholder="e.g. 150.00" />
+
+            <label class="block text-sm">Description</label>
+            <input type="text" name="description" class="input input-bordered w-full" />
+
+            <div class="pt-2">
+              <button class="btn btn-primary w-full">Add</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="mt-4 bg-white p-4 rounded shadow max-h-96 overflow-auto">
+          <h3 class="font-semibold">Ledger</h3>
+          <table class="table w-full mt-2">
+            <thead>
+              <tr><th>Date</th><th>Type</th><th>Amount</th></tr>
+            </thead>
+            <tbody>
+              {% for e in entries %}
+                <tr>
+                  <td>{{ e.date }}</td>
+                  <td>{{ e.type }}</td>
+                  <td class="text-right">${{ '%.2f'|format(e.amount) }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart.js script -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const pnlDaily = {{ pnl_daily_json | safe }};
+    const cumulative = {{ cumulative_json | safe }};
+
+    function labelsFromSeries(series){ return series.map(s => s.date); }
+    function valuesFromSeries(series, key){ return series.map(s => s[key]); }
+
+    // daily P&L bar chart
+    const ctxDaily = document.getElementById('chart-daily').getContext('2d');
+    new Chart(ctxDaily, {
+      type: 'bar',
+      data: {
+        labels: labelsFromSeries(pnlDaily),
+        datasets: [{ label: 'Daily P&L', data: valuesFromSeries(pnlDaily, 'amount'), backgroundColor: '#34d399' }]
+      }
+    });
+
+    // cumulative line chart
+    const ctxCum = document.getElementById('chart-cumulative').getContext('2d');
+    new Chart(ctxCum, {
+      type: 'line',
+      data: {
+        labels: labelsFromSeries(cumulative),
+        datasets: [{ label: 'Balance', data: valuesFromSeries(cumulative, 'balance'), borderColor: '#6366f1', fill: false }]
+      }
+    });
+  </script>
+</div>
+
+{% endblock %}
+
+

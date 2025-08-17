@@ -1,20 +1,90 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="flex items-center justify-center min-h-screen bg-base-200">
-  <div class="card w-96 bg-base-100 shadow-sm">
-    <figure>
-      <img src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp" alt="Shoes" />
-    </figure>
-    <div class="card-body">
-      <h2 class="card-title">Hello there</h2>
-      <p>Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi.</p>
-      <div class="card-actions justify-end">
-        <a class="btn btn-primary" href="#">Get Started</a>
-      </div>
+<header class="bg-gradient-to-r from-primary to-secondary text-white">
+  <div class="container mx-auto px-6 py-12 flex items-center justify-between">
+    <div>
+      <h1 class="text-4xl font-bold">Trade Journal</h1>
+      <p class="mt-2 max-w-xl">Powerful trade journaling and analytics to help you improve — automated, insightful, and beautiful.</p>
+    </div>
+    <div class="space-x-3">
+      {% if current_user.is_authenticated %}
+        <a class="btn btn-ghost text-white" href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a class="btn btn-outline text-white" href="{{ url_for('logout') }}">Logout</a>
+      {% else %}
+        <a class="btn btn-outline text-white" href="{{ url_for('login') }}">Log In</a>
+        <a class="btn btn-primary" href="{{ url_for('register') }}">Get Started</a>
+      {% endif %}
     </div>
   </div>
-</div>
+</header>
+
+<main class="bg-base-200">
+  <section class="container mx-auto px-6 py-16 text-center">
+    <h2 class="text-5xl font-extrabold">Journal. Analyze. Improve.</h2>
+    <p class="mt-4 text-xl text-muted">Understand the behaviours that lead to profit with detailed analytics, playbooks, and backtesting.</p>
+
+    <div class="mt-8 flex items-center justify-center space-x-4">
+      {% if current_user.is_authenticated %}
+        <a class="btn btn-primary btn-lg" href="{{ url_for('dashboard') }}">Open Dashboard</a>
+      {% else %}
+        <a class="btn btn-primary btn-lg" href="{{ url_for('register') }}">Get Started — It's Free</a>
+        <a class="btn btn-ghost btn-lg" href="{{ url_for('login') }}">Learn More</a>
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="container mx-auto px-6 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="card bg-base-100 p-6 shadow">
+        <h3 class="text-2xl font-bold">Automated Journaling</h3>
+        <p class="mt-2 text-muted">Sync your broker or upload files — we parse trades so you can focus on trading.</p>
+      </div>
+      <div class="card bg-base-100 p-6 shadow">
+        <h3 class="text-2xl font-bold">Analytics</h3>
+        <p class="mt-2 text-muted">50+ reports to surface edge cases, risks, and winning behaviours.</p>
+      </div>
+      <div class="card bg-base-100 p-6 shadow">
+        <h3 class="text-2xl font-bold">Playbooks & Backtesting</h3>
+        <p class="mt-2 text-muted">Define rules, backtest strategies, and replay trades to improve execution.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-base-100 py-12">
+    <div class="container mx-auto px-6 text-center">
+      <div class="prose mx-auto">
+        <p class="text-3xl font-semibold">Trusted by traders worldwide</p>
+        <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-6 items-center">
+          <div class="text-center">20.2B+<div class="text-sm text-muted">Trades Journaled</div></div>
+          <div class="text-center">100K+<div class="text-sm text-muted">Backtested Sessions</div></div>
+          <div class="text-center">1M+<div class="text-sm text-muted">Trades Shared</div></div>
+          <div class="text-center">30K+<div class="text-sm text-muted">Traders</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container mx-auto px-6 py-12 text-center">
+    <h3 class="text-3xl font-bold">Ready to become a better trader?</h3>
+    <p class="mt-3 text-muted">Start journaling and get actionable insights today.</p>
+    <div class="mt-6">
+      {% if current_user.is_authenticated %}
+        <a class="btn btn-primary btn-lg" href="{{ url_for('dashboard') }}">Open Dashboard</a>
+      {% else %}
+        <a class="btn btn-primary btn-lg" href="{{ url_for('register') }}">Get Started — It's Free</a>
+      {% endif %}
+    </div>
+  </section>
+</main>
+
+<footer class="bg-base-300 py-8">
+  <div class="container mx-auto px-6 text-center text-sm text-muted">
+    <div>© {{ current_year if current_year is defined else "2025" }} Trade Journal — All rights reserved.</div>
+    <div class="mt-2">Tools for futures, currency & options involve substantial risk — not financial advice.</div>
+  </div>
+</footer>
+
 {% endblock %}
 
 

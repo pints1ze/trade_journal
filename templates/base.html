@@ -7,6 +7,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
   </head>
   <body>
+    <!-- <nav>
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('dashboard') }}">Dashboard</a> |
+        <a href="{{ url_for('logout') }}">Logout</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">Login</a> |
+        <a href="{{ url_for('register') }}">Register</a>
+      {% endif %}
+    </nav> -->
     {% block content %}{% endblock %}
   </body>
 </html>

@@ -3,3 +3,5 @@
 # pandas==2.2.2
 
 Flask
+Flask-Login
+Werkzeug
