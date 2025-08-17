@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@layer base {
+  /* your base styles here */
+}
+
+@layer components {
+  /* your components here */
+}
+
+@layer utilities {
+  /* your utilities here */
+}
+
+/* Include DaisyUI plugin via PostCSS or when building with Tailwind CLI config */
+
+

@@ -5,5 +5,9 @@
   },
   "devDependencies": {
     "daisyui": "^5.0.50"
+  },
+  "scripts": {
+    "build-css": "npx @tailwindcss/cli -i ./src/input.css -o ./static/css/output.css --minify",
+    "watch-css": "npx @tailwindcss/cli -i ./src/input.css -o ./static/css/output.css --watch"
   }
 }
