@@ -1,1 +1,15 @@
-.venv/\n__pycache__/\n*.py[cod]\n*.pyo\n*.pyd\n.Python\nenv/\nvenv/\n.build/\n.eggs/\ndist/\nbuild/\n*.egg-info/\n.pytest_cache/\n
+.venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.build/
+.eggs/
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+node_modules/
