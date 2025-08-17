@@ -1,3 +1,5 @@
 # Add your project dependencies below, e.g.
 # numpy==1.26.2
 # pandas==2.2.2
+
+Flask
